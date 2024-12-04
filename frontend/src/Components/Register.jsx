@@ -25,7 +25,7 @@ const RegisterForm = () => {
         userPassword,
         isAdmin,
       });
-console.log(response)
+      console.log(response)
       // Handle successful registration
       setSuccess('User registered successfully!');
       setLoading(false);
@@ -49,49 +49,49 @@ console.log(response)
   };
 
   return (
-    <div className="register-form-container text-center m-5"><br/>
+    <div className="register-form-container text-center m-5"><br />
       <h2 className='fw-bold m-5'>Register</h2>
-      <div className='border border-4 border-dark shadow-2 rounded w-25 mx-auto p-3'style={{backgroundColor:"aliceblue"}} >
-      <form onSubmit={handleSubmit}>
-        <div className='m-3 fw-bold '>
-          <label htmlFor="userName">Username:</label>
-          <input className='border border-2 border-secondary px-3 py-1 m-3'
-            type="text"
-            id="userName"
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
-            required
-          />
-        </div>
-        <div className='m-3 fw-bold '>
-          <label htmlFor="userEmail">Email:</label>
-          <input className='border border-2 border-secondary px-3 py-1 m-3'
-            type="email"
-            id="userEmail"
-            value={userEmail}
-            onChange={(e) => setUserEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div className='m-3 fw-bold '>
-          <label htmlFor="userPassword">Password:</label>
-          <input className='border border-2 border-secondary px-3 py-1 m-3'
-            type="password"
-            id="userPassword"
-            value={userPassword}
-            onChange={(e) => setUserPassword(e.target.value)}
-            required
-          />
-        </div>
-        
-        <div className='m-3 fw-bold '>
-          <Button variant='dark' type="submit" disabled={loading}>
-            {loading ? 'Registering...' : 'Register'}
-          </Button>
-        </div>
-        {error && <p className="error-message">{error}</p>}
-        {success && <p className="success-message">{success}</p>}
-      </form></div><br/><br/><br/><br/><br/><br/><br/>
+      <div className='border border-4 border-dark shadow-2 rounded w-25 mx-auto p-3' style={{ backgroundColor: "aliceblue" }} >
+        <form onSubmit={handleSubmit}>
+          <div className='m-3 fw-bold '>
+            <label htmlFor="userName">Username:</label>
+            <input className='border border-2 border-secondary px-3 py-1 m-3'
+              type="text"
+              id="userName"
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
+              required
+            />
+          </div>
+          <div className='m-3 fw-bold '>
+            <label htmlFor="userEmail">Email:</label>
+            <input className='border border-2 border-secondary px-3 py-1 m-3'
+              type="email"
+              id="userEmail"
+              value={userEmail}
+              onChange={(e) => setUserEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className='m-3 fw-bold '>
+            <label htmlFor="userPassword">Password:</label>
+            <input className='border border-2 border-secondary px-3 py-1 m-3'
+              type="password"
+              id="userPassword"
+              value={userPassword}
+              onChange={(e) => setUserPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className='m-3 fw-bold '>
+            <Button variant='dark' type="submit" disabled={loading}>
+              {loading ? 'Registering...' : 'Register'}
+            </Button>
+          </div>
+          {error && <p className="error-message">{error}</p>}
+          {success && <p className="success-message">{success}</p>}
+        </form></div><br /><br /><br /><br /><br /><br /><br />
     </div>
   );
 };

@@ -89,7 +89,7 @@ exports.deleteBlog = async (req, res) => {
     if (blog.author.toString() !== req.user.id && !req.user.isAdmin) {
       return res.status(403).json({ message: 'You are not authorized to delete this blog' });
     }
-    await Blog.deleteMany({ author: req.params.id });
+    
     await Blog.findByIdAndDelete(req.params.id);
     res.status(200).json({ message: 'Blog deleted successfully' });
   } catch (err) {

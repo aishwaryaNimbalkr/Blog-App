@@ -52,7 +52,7 @@ const EditBlog = () => {
     e.preventDefault();
     setLoading(true);
     const formData = new FormData();
-    
+
     // Append the form fields to formData
     formData.append('title', blog.title);
     formData.append('content', blog.content);
@@ -72,7 +72,7 @@ const EditBlog = () => {
           'Authorization': `Bearer ${token}`  // Include token in the request header
         }
       });
-      
+
       setLoading(false);
       navigate(`/blog/${id}`); // Redirect to the blog page after successful update
     } catch (err) {
@@ -89,35 +89,35 @@ const EditBlog = () => {
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="title">
           <Form.Label>Title</Form.Label>
-          <Form.Control 
-            type="text" 
-            placeholder="Enter blog title" 
-            name="title" 
-            value={blog.title} 
-            onChange={handleChange} 
+          <Form.Control
+            type="text"
+            placeholder="Enter blog title"
+            name="title"
+            value={blog.title}
+            onChange={handleChange}
             required
           />
         </Form.Group>
 
         <Form.Group controlId="content" className="mt-3">
           <Form.Label>Content</Form.Label>
-          <Form.Control 
-            as="textarea" 
-            rows={5} 
-            placeholder="Enter blog content" 
-            name="content" 
-            value={blog.content} 
-            onChange={handleChange} 
+          <Form.Control
+            as="textarea"
+            rows={5}
+            placeholder="Enter blog content"
+            name="content"
+            value={blog.content}
+            onChange={handleChange}
             required
           />
         </Form.Group>
 
         <Form.Group controlId="images" className="mt-3">
           <Form.Label>Images</Form.Label>
-          <Form.Control 
-            type="file" 
-            multiple 
-            onChange={handleFileChange} 
+          <Form.Control
+            type="file"
+            multiple
+            onChange={handleFileChange}
           />
         </Form.Group>
 
