@@ -20,7 +20,7 @@ const EditBlog = () => {
     const fetchBlogData = async () => {
       try {
         const token = localStorage.getItem('token');  // Get the token from localStorage
-        const response = await axios.get(`http://localhost:4000/api/admin/blogs/${id}`, {
+        const response = await axios.get(`http://localhost:4000/api/blog/${id}`, {
           headers: {
             'Authorization': `Bearer ${token}`  // Pass token in the request header
           }
@@ -66,7 +66,7 @@ const EditBlog = () => {
       const token = localStorage.getItem('token');  // Get the token again before making the request
 
       // Send the request to the backend to update the blog
-      const response = await axios.put(`http://localhost:4000/api/admin/editBlog/${id}`, formData, {
+      const response = await axios.put(`http://localhost:4000/api/blog/editBlog/${id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${token}`  // Include token in the request header

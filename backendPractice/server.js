@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const cors= require('cors')
 require('./config/dbConnect').connect()
 require('dotenv').config()
@@ -8,6 +9,8 @@ const adminRoutes = require('./Routes/adminRoutes')
 const app = express();
 //app.use(cors())
 app.use(cors({ origin: 'http://localhost:3000' }));
+app.use('/uploads', express.static('uploads'));
+
 app.use(express.json())
 const port = process.env.port || 5000
 

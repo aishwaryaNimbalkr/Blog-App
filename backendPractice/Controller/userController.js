@@ -1,6 +1,7 @@
 const User= require('../Model/userSchema')
 const bcrypt= require('bcrypt')
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const Blog = require('../Model/blogSchema');
 
 
 exports.Register = async (req, res) => {
@@ -64,7 +65,7 @@ exports.getAllUsers = async (req, res) => {
     try {
       const user = await User.findById(req.params.id);
       if (!user) return res.status(404).json({ message: 'User not found' });
-  
+      await Blog.deleteMany({ author: req.params.id });
       // Delete the user
       await User.findByIdAndDelete(req.params.id);
       res.status(200).json({ message: 'User deleted successfully' });

@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { Nav, Navbar, NavbarBrand, NavItem, Table } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 import{jwtDecode }from 'jwt-decode';
-import { MdDelete,MdEdit ,MdVisibility} from "react-icons/md";
+import { MdDelete ,MdVisibility} from "react-icons/md";
 const AdminDashboard = () => {
+  
     const [adminName, setAdminName] = useState('');
   const [users, setUsers] = useState([]);
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  console.log(adminName)
 
   useEffect(() => {
     fetchUsers();
@@ -24,6 +27,7 @@ const AdminDashboard = () => {
     if (token) {
       try {
         const decoded = jwtDecode(token);  // Decode the JWT
+        
         setAdminName(decoded.userName);  // Set the admin's username
       } catch (error) {
         console.error('Failed to decode token:', error);
@@ -41,6 +45,7 @@ const AdminDashboard = () => {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
+      console.log(response.data)
       setUsers(response.data);
     } catch (err) {
       setError('Failed to fetch users.');
@@ -74,7 +79,9 @@ const AdminDashboard = () => {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
+
       fetchUsers(); // Re-fetch users after deletion
+      fetchBlogs(); // Re-fetch blogs to ensure the blogs of the deleted user are removeds
     } catch (err) {
       setError('Failed to delete user.');
     }
@@ -110,13 +117,13 @@ const AdminDashboard = () => {
     navigate(`/blog/${blog._id}`);
   };
  // edit a blog
- const handleEditBlog=(blog)=>{
-    navigate(`/edit-blog/${blog._id}`);
- };
+//  const handleEditBlog=(blog)=>{
+//     navigate(`/edit-blog/${blog._id}`);
+//  };
  
 
   return (
-    <div className="admin-dashboard-container text-center mt-2">
+    <div className="admin-dashboard-container text-center mt-2 p-5">
         <div  className='d-flex justify-content-between mx-5'><h2>Admin Dashboard</h2><h4 className='text-light' > {adminName}</h4></div>
      
 
@@ -126,7 +133,7 @@ const AdminDashboard = () => {
       {/* Users Section */}
       <div className="section text-center m-5">
         <h2 className='fw-bold m-5'>Users</h2>
-        <div className='border border-4 border-dark shadow-2 rounded w-50 mx-auto 'style={{backgroundColor:"aliceblue"}} >
+        <div className='border border-4 border-dark shadow-2 rounded w-100 mx-auto p-3 'style={{backgroundColor:"aliceblue"}} >
         <Table striped>
           <thead>
             <tr>
@@ -138,8 +145,8 @@ const AdminDashboard = () => {
           <tbody>
             {users.map((user) => (
               <tr key={user._id}>
-                <td>{user.userName}</td>
-                <td>{user.userEmail}</td>
+                <td>{user?.userName || "N/A"}</td>
+                <td>{user?.userEmail || "N/A"}</td>
                 <td>
                   <MdDelete size="25" style={{cursor:"pointer"}} onClick={() => handleDeleteUser(user._id)}/>
                 </td>
@@ -151,9 +158,9 @@ const AdminDashboard = () => {
       </div>
 
       {/* Blogs Section */}
-      <div className="section text-center m-5">
+      <div className="section text-center m-5 ">
         <h2 className='fw-bold m-5'>Blogs</h2>
-        <div className='border border-4 border-dark shadow-2 rounded w-50 mx-auto p-3'style={{backgroundColor:"aliceblue"}} >
+        <div className='border border-4 border-dark shadow-2 rounded w-100 mx-auto p-3'style={{backgroundColor:"aliceblue"}} >
         <Table striped>
           <thead>
             <tr>
@@ -165,8 +172,8 @@ const AdminDashboard = () => {
           <tbody>
             {blogs.map((blog) => (
               <tr key={blog._id}>
-                <td>{blog.title}</td>
-                <td>{blog.author.userName}</td>
+                <td>{blog?.title || "No title"}</td>
+                <td>{blog?.author?.userName || "Unknown Author"}</td>
                 <td>
                 {/* <MdEdit size="25" style={{cursor:"pointer"}} onClick={() => handleEditBlog(blog)}/>  */}
                   <MdDelete size="25" style={{cursor:"pointer"}} onClick={() => handleDeleteBlog(blog._id)}/>

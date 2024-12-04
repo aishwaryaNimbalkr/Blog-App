@@ -8,6 +8,7 @@ import UserDashboard from './Components/UserDashboard';
 import AdminDashboard from './Components/AdminDashboard';
 import EditBlog from './Components/EditBlog';
 import BlogDetail from './Components/BlogDetail';
+import CreateBlog from './Components/CreateBlog';
 
 function App() {
   return (
@@ -17,11 +18,11 @@ function App() {
   <Route path="/" element={<HomePage/>}/>
   <Route path="/login" element={<Login/>}/>
   <Route path="/register" element={<Register/>}/>
-  <Route path="/userDashboard" element={<UserDashboard/>}/>
+  <Route path="/userDashboard/:id" element={<UserDashboard/>}/>
   <Route path="/adminDashboard" element={<AdminDashboard/>}/>
   <Route path="/edit-blog/:id" element={<EditBlog/>} />
   <Route path="/blog/:id" element={<BlogDetail/>}/>
-
+ <Route path="/create-blog" element={<CreateBlog/>}/>
 </Routes>
  </>
  </BrowserRouter>

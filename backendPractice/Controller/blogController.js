@@ -1,32 +1,11 @@
 const Blog = require('../Model/blogSchema');
-const multer = require('multer');
+
 const path = require('path');
+const User = require('../Model/userSchema');
 
-// Set up multer storage and file name for image uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/blog_images');  // Folder to store uploaded images
-  },
-  filename: (req, file, cb) => {
-    const fileName = `${Date.now()}_${file.originalname}`;
-    cb(null, fileName);  // Save file with a unique name
-  },
-});
-
-// Multer setup with size and file filter restrictions
-const upload = multer({
-  storage,
-  limits: { fileSize: 10 * 1024 * 1024 },  // 10MB file size limit
-  fileFilter: (req, file, cb) => {
-    if (!file.mimetype.startsWith('image/')) {
-      return cb(new Error('Only image files are allowed'));
-    }
-    cb(null, true);
-  },
-});
 
 // Create a new blog
-exports.createBlog = upload.array('images', 5), async (req, res) => {
+exports.createBlog = async (req, res) => {
   const { title, content } = req.body;
   const imagePaths = req.files ? req.files.map(file => file.path) : [];
 
@@ -58,8 +37,23 @@ exports.getAllBlogs = async (req, res) => {
   }
 };
 
+// Get my blogs (blogs by the authenticated user)
+exports.getMyBlogs = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const blogs = await Blog.find({ author: id })  // Filter blogs by the user's ID
+      .populate('author', 'userName')  // Populate the author field with userName
+      .sort({ createdAt: -1 });  // Sort blogs by creation date, newest first
+    
+    res.status(200).json({ message: 'My blogs retrieved successfully', blogs });
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
+
+
 // Edit an existing blog (only by the author or admin)
-exports.editBlog = upload.array('images', 5), async (req, res) => {
+exports.editBlog = async (req, res) => {
   const { id } = req.params;
   const { title, content } = req.body;
   const imagePaths = req.files ? req.files.map(file => file.path) : [];
@@ -95,7 +89,7 @@ exports.deleteBlog = async (req, res) => {
     if (blog.author.toString() !== req.user.id && !req.user.isAdmin) {
       return res.status(403).json({ message: 'You are not authorized to delete this blog' });
     }
-
+    await Blog.deleteMany({ author: req.params.id });
     await Blog.findByIdAndDelete(req.params.id);
     res.status(200).json({ message: 'Blog deleted successfully' });
   } catch (err) {
@@ -106,6 +100,7 @@ exports.deleteBlog = async (req, res) => {
 // Get a single blog by ID
 exports.getBlogById = async (req, res) => {
   const { id } = req.params;  // Get the blog ID from the URL parameters
+  const { user } = req; // Get the authenticated user from the request (if present)
 
   try {
     // Find the blog by ID and populate the 'author' field with 'userName'
@@ -116,6 +111,7 @@ exports.getBlogById = async (req, res) => {
       return res.status(404).json({ message: 'Blog not found' });
     }
 
+    // Remove the check for admin or author (Allow all users to view the blog)
     // Return the blog if found
     res.status(200).json({ message: 'Blog retrieved successfully', blog });
   } catch (err) {
@@ -124,18 +120,25 @@ exports.getBlogById = async (req, res) => {
   }
 };
 
+
+
 // Add a comment to a blog
 exports.addComment = async (req, res) => {
   const { blogId } = req.params;
   const { content } = req.body;
 
   try {
-    const blog = await Blog.findById(blogId); 
+    const blog = await Blog.findById(blogId).populate('comments.user', 'userName');; 
     if (!blog) return res.status(404).json({ message: 'Blog not found' });
+
+     // Fetch the user who is making the comment
+     const user = await User.findById(req.user.id);  // Assuming User is the model for users
+     if (!user) return res.status(404).json({ message: 'User not found' });
 
     // Create a comment object and add it to the blog's comments array
     const comment = {
       user: req.user.id,  // User ID from the authentication token
+      userName: user.userName,  
       content,
     };
 

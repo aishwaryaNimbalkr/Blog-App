@@ -25,7 +25,7 @@ const RegisterForm = () => {
         userPassword,
         isAdmin,
       });
-
+console.log(response)
       // Handle successful registration
       setSuccess('User registered successfully!');
       setLoading(false);
@@ -91,7 +91,7 @@ const RegisterForm = () => {
         </div>
         {error && <p className="error-message">{error}</p>}
         {success && <p className="success-message">{success}</p>}
-      </form></div>
+      </form></div><br/><br/><br/><br/><br/><br/><br/>
     </div>
   );
 };

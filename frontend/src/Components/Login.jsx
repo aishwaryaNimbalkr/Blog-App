@@ -32,9 +32,10 @@ const Login = () => {
       // Redirect user or show success message, depending on the requirement
     // Redirect based on user role (admin or user)
     if (user.isAdmin) {
-        navigate('/adminDashboard'); // Redirect to Admin Dashboard
+        navigate(`/adminDashboard`); // Redirect to Admin Dashboard
       } else {
-        navigate('/userDashboard'); // Redirect to User Dashboard
+        navigate(`/userDashboard/${user._id}` ); // Redirect to User Dashboard
+       
       }
     } catch (error) {
       setLoading(false);
@@ -84,7 +85,7 @@ const Login = () => {
         <div className="user-info">
           <p>Welcome, {user.name}!</p>
         </div>
-      )}
+      )}<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
     </div>
   );
 };
